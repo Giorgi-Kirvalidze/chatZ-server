@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import {Module} from '@nestjs/common';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {ConfigModule, ConfigService} from '@nestjs/config';
 
 @Module({
   imports: [
@@ -18,8 +18,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           __dirname + '/../**/*.entity.js',
         ],
         synchronize: true,
+        // entities: ["dist/api/**/*.entity.js"],
+        // migrations: ["dist/api/migrations/*.js"],
+        // synchronize: false,
+        // cli: {
+        //   "migrationsDir": "apps/api/migrations"
+        // }
       })
     }),
   ],
 })
-export class DatabaseModule {}
+export class DatabaseModule {
+}

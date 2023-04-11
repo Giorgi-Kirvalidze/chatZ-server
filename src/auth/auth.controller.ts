@@ -1,29 +1,34 @@
-import {Controller, Request, Post, UseGuards, Get} from '@nestjs/common';
+import {Controller, Request, Post, UseGuards, Get, Res} from '@nestjs/common';
 import {AuthService} from "./auth.service";
 import {LocalAuthGuard} from "./local-auth.guard";
 import {JwtAuthGuard} from "./jwt-auth.guard";
 import {Public} from "../metadata";
+import {Request as RequestType} from 'express';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {
   }
 
   @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
+  @Post('login')
   async login(@Request() req) {
-    return this.authService.login(req.user);
+    const secretData = await this.authService.login(req.user);
+    req.res.cookie('auth-cookie', secretData, {httpOnly: true});
+    return {'jwt': secretData}
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
+    console.log('profile')
     return req.user;
   }
 
   @Public()
   @Get()
   findAll() {
+    console.log('i am dead')
     return [];
   }
 }
